@@ -1,64 +1,39 @@
 # APB Protocol with Memory Interface
 
-A Verilog RTL project implementing an AMBA APB-style slave interface connected to an internal memory, with a self-checking testbench for basic read and write transactions.
+A Verilog RTL example of an APB-style memory-mapped slave and a self-checking testbench for basic read/write transactions.
 
-## Project goals
+## Features
+- APB SETUP and ACCESS phase stimulus in the testbench.
+- Memory-mapped writes and reads.
+- `PSEL`, `PENABLE`, `PWRITE`, `PADDR`, `PWDATA`, `PRDATA`, `PREADY`, and `PSLVERR` signals.
+- Testbench checks data written to and read from memory.
 
-- Implement the APB SETUP and ACCESS phases.
-- Support memory-mapped read and write transactions.
-- Handle `PSEL`, `PENABLE`, `PWRITE`, `PADDR`, `PWDATA`, and `PRDATA`.
-- Verify transaction timing and data integrity with a self-checking testbench.
+## Files
+- `rtl/apb_memory_slave.v` — synthesizable-style RTL example.
+- `tb/tb_apb_memory_slave.v` — self-checking simulation testbench.
+- `sim/run.sh` — local Icarus Verilog compile/run script.
 
-## Design overview
-
-The APB master-side stimulus in the testbench drives the interface signals. The slave decodes the address and performs a memory read or write during the appropriate transfer phase. The testbench checks that written data can be read back correctly and reports pass/fail results.
-
-## Repository layout
-
-```text
-.
-├── rtl/       # RTL modules
-├── tb/        # Testbench
-├── sim/       # Simulator scripts and supporting files
-└── README.md
-```
-
-> The folders above describe the intended project structure. Add the corresponding source files as they are finalized.
-
-## Run online with EDA Playground
-
-1. Open [EDA Playground](https://www.edaplayground.com/).
-2. Select Verilog/SystemVerilog and a supported simulator.
-3. Paste the design modules into the Design pane and the testbench into the Testbench pane.
-4. Click **Run** and inspect the transcript for the test results. Enable EPWave if you want to inspect waveforms.
-
-## Run locally with Icarus Verilog
-
-Once the RTL and testbench files have been added, compile the relevant source files, for example:
+## Run locally
+Install Icarus Verilog, then run from the repository root:
 
 ```bash
-iverilog -g2012 -o sim.out rtl/*.v tb/*.v
-vvp sim.out
+bash sim/run.sh
 ```
 
-Adjust the file paths if the source files use different names or locations.
+Expected output includes PASS lines and a final `APB test summary`. Run it yourself and confirm `FAIL=0` before reporting the project as verified.
 
-## Verification checklist
+## Run on EDA Playground
+1. Open [EDA Playground](https://www.edaplayground.com/).
+2. Select Verilog and a supported simulator.
+3. Paste `rtl/apb_memory_slave.v` into the Design pane.
+4. Paste `tb/tb_apb_memory_slave.v` into the Testbench pane.
+5. Run and inspect the transcript. Enable EPWave for waveforms if desired.
 
-- [ ] APB SETUP phase precedes ACCESS phase.
-- [ ] Write transactions update the selected memory location.
-- [ ] Read transactions return the expected data.
-- [ ] Back-to-back transactions behave as expected.
-- [ ] Testbench reports no mismatches.
+## Notes
+This is a learning/portfolio implementation, not a complete AMBA compliance IP. It assumes word-aligned 32-bit register addresses and completes ACCESS immediately with `PREADY=1`. Extend the checks for wait states, reset behavior, invalid addresses, and full protocol assertions as needed.
 
-## Status
+## Verification status
+Source and testbench have been added. Simulation results have not been independently confirmed in this repository yet.
 
-**Documentation scaffold:** This README describes the project scope and intended verification. Run the testbench and update this section with actual simulator, test count, and results before presenting it as validated.
-
-## Skills demonstrated
-
-Verilog RTL, finite-state machines, AMBA APB protocol concepts, memory-mapped interfaces, self-checking testbenches, simulation-based functional verification.
-
-## License
-
-Choose a license before distributing or reusing this project.
+## Skills
+Verilog RTL, APB protocol concepts, memory-mapped I/O, self-checking testbenches, simulation.
