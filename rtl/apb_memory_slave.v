@@ -19,7 +19,8 @@ module apb_memory_slave #(
     localparam ADDR_BITS = $clog2(DEPTH);
     reg [DATA_WIDTH-1:0] mem [0:DEPTH-1];
     wire access_phase = PSEL && PENABLE;
-    wire [ADDR_BITS-1:0] word_addr = PADDR[ADDR_BITS:2];
+    // Word-aligned 32-bit registers: address bits [ADDR_BITS+1:2].
+    wire [ADDR_BITS-1:0] word_addr = PADDR[ADDR_BITS+1:2];
 
     // This example slave completes every selected ACCESS phase immediately.
     assign PREADY = 1'b1;
